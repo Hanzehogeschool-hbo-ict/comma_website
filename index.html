@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="style.scss">
+<link rel="icon" href="/docs/5.0/assets/img/favicons/favicon.ico">
+
+<head>
+    <meta charset="UTF-8">
+    <title>OpenPilot Architecture</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<section class="app">
+    <aside class="sidebar">
+        <header>
+            <b>selfdrive</b>
+        </header>
+        <nav class="sidebar-nav">
+
+            <ul>
+                <li>
+                    <a href="#boardd"><span>boardd</span></a>
+                    <ul class="nav-flyout">
+                        <li class="pub">
+                            <a href="#sendcan">sendcan</a>
+                        </li>
+                        <li class="pub">
+                            <a href="#can">can</a>
+                        </li>
+                        <li class="pub">
+                            <a href="#peripheralState">peripheralState</a>
+                        </li>
+                        <li class="pub">
+                            <a href="#pandaStates">pandaStates</a>
+                        </li>
+                        <li class="pub">
+                            <a href="#ubloxRaw">ubloxRaw</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#controlsState">controlsState</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#frameData">driverCameraState</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#deviceState">deviceState</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#camerad"><span class="">camerad</span></a>
+                    <ul class="nav-flyout">
+                        <li class="pub">
+                            <a href="#frameData">roadCameraState</a>
+                        </li>
+                        <li class="pub">
+                            <a href="#frameData">driverCameraState</a>
+                        </li>
+                        <li class="pub">
+                            <a href="#frameData">wideRoadCameraState</a>
+                        </li>
+                        <li class="pub">
+                            <a href="#thumbnail">thumbnail</a>
+                        </li>
+                        <li  class="sub">
+                            <a href="#driverState">driverState</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#sensord"><span class="">sensord</span></a>
+                    <ul class="nav-flyout">
+                        <li class="pub">
+                            <a href="#gpsLocationExternal">gpsLocationExternal</a>
+                        </li>
+                        <li class="pub">
+                            <a href="#qcomGnss">qcomGnss</a>
+                        </li>
+                        <li class="pub">
+                            <a href="#sensorEvents">sensorEvents</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#ubloxGnss">ubloxGnss</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#qcomGnss">qcomGnss</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#modeld"><span class="">modeld</span></a>
+                    <ul class="nav-flyout">
+                        <li class="pub">
+                            <a href="#modelV2">modelV2</a>
+                        </li>
+                        <li class="pub">
+                            <a href="#cameraOdometry">cameraOdometry</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#lateralPlan">lateralPlan</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#frameData">roadCameraState</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#liveCalibration">liveCalibration</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#dmonitoringmodeld"><span class="">dmonitoringmodeld</span></a>
+                    <ul class="nav-flyout">
+                        <li class="pub">
+                            <a href="#driverState">driverState</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#liveCalibration">liveCalibration</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#dmonitoringd"><span class="">dmonitoringd</span></a>
+                    <ul class="nav-flyout">
+                        <li class="pub">
+                            <a href="#driverState">driverState</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#ubloxd"><span class="">ubloxd</span></a>
+                    <ul class="nav-flyout">
+                        <li>
+                            <a href="#ubloxd">ubloxd</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#locationd"><span class="">locationd</span></a>
+                    <ul class="nav-flyout">
+                        <li class="pub">
+                            <a href="#liveLocationKalman">liveLocationKalman</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#gpsLocationExternal">gpsLocationExternal</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#carParams">carParams</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#calibrationd"><span class="">calibrationd</span></a>
+                    <ul class="nav-flyout">
+                        <li class="pub">
+                            <a href="#liveCalibration">liveCalibration</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#cameraOdometry">cameraOdometry</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#carState">carState</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#paramsd"><span class="">paramsd</span></a>
+                    <ul class="nav-flyout">
+                        <li class="pub">
+                            <a href="#liveParameters">liveParameters</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#liveLocationKalman">liveLocationKalman</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#carState">carState</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#radard"><span class="">radard</span></a>
+                    <ul class="nav-flyout">
+                        <li class="pub">
+                            <a href="#radarState">radarState</a>
+                        </li>
+                        <li class="pub">
+                            <a href="#liveTracks">liveTracks</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#modelV2">modelV2</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#carState">carState</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#plannerd"><span class="">plannerd</span></a>
+                    <ul class="nav-flyout">
+                        <li class="pub">
+                            <a href="#longitudinalPlan">longitudinalPlan</a>
+                        </li>
+                        <li class="pub">
+                            <a href="#lateralPlan">lateralPlan</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#carState">carState</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#controlsState">controlsState</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#radarState">radarState</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#modelV2">modelV2</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#controlsd"><span class="">controlsd</span></a>
+                    <ul class="nav-flyout">
+                        <li class="pub">
+                            <a href="#sendcan">sendcan</a>
+                        </li>
+                        <li class="pub">
+                            <a href="#controlsState">controlsState</a>
+                        </li>
+                        <li class="pub">
+                            <a href="#carState">carState</a>
+                        </li>
+                        <li class="pub">
+                            <a href="#carControl">carControl</a>
+                        </li>
+                        <li class="pub">
+                            <a href="#carEvents">carEvents</a>
+                        </li>
+                        <li class="pub">
+                            <a href="#carParams">carParams</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#deviceState">deviceState</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#pandaStates">pandaStates</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#peripheralState">peripheralState</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#modelV2">modelV2</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#liveCalibration">liveCalibration</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#driverMonitoringState">driverMonitoringState</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#longitudinalPlan">longitudinalPlan</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#lateralPlan">lateralPlan</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#liveLocationKalman">liveLocationKalman</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#managerState">managerState</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#liveParameters">liveParameters</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#radarState">radarState</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#managerd"><span class="">managerd</span></a>
+                    <ul class="nav-flyout">
+                        <li class="pub">
+                            <a href="#managerState">managerState</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#deviceState">deviceState</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#carParams">carParams</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#thermald"><span class="">thermald</span></a>
+                    <ul class="nav-flyout">
+                        <li class="pub">
+                            <a href="#deviceState">deviceState</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#peripheralState">peripheralState</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#gpsLocationExternal">gpsLocationExternal</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#controlsState">controlsState</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#pandaStates">pandaStates</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#loggerd"><span class="">loggerd</span></a>
+                    <ul class="nav-flyout">
+                        <li>
+                            <a href="#loggerd">loggerd</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#athenad"><span class="">athenad</span></a>
+                    <ul class="nav-flyout">
+                        <li class="sub">
+                            <a href="#deviceState">deviceState</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="#ui"><span class="">ui</span></a>
+                    <ul class="nav-flyout">
+                        <li class="pub">
+                            <a href="#navThumbnail">navThumbnail</a>
+                        </li>
+                        <li class="pub">
+                            <a href="#navInstruction">navInstruction</a>
+                        </li>
+                        <li class="pub">
+                            <a href="#navRoute">navRoute</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#deviceState">deviceState</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#controlsState">controlsState</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#lateralPlan">lateralPlan</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#modelV2">modelV2</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#liveCalibration">liveCalibration</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#radarState">radarState</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#deviceState">deviceState</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#frameData">roadCameraState</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#pandaStates">pandaStates</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#carParams">carParams</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#driverMonitoringState">driverMonitoringState</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#sensorEvents">sensorEvents</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#carState">carState</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#liveLocationKalman">liveLocationKalman</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#frameData">wideRoadCameraState</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#managerState">managerState</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#navInstruction">navInstruction</a>
+                        </li>
+                        <li class="sub">
+                            <a href="#navRoute">navRoute</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <section class="services">
+        <h1>Services</h1>
+        <p>Below are all the services found in openpilot > selfdrive
+        You'll get a summary of the service and below that are the messages that are sent/received in that service
+        The <span class="pub">blue messages</span> are sent/published by the service
+        The <span class="sub">red messages</span> are received/subscribed by the service</p>
+        <div id="boardd" class="service">
+            <h3>boardd</h3>
+            This service manages the interface between the main device and the panda, which communicates with the peripherals. These perihperals include the GNSS module, infrared LEDs (for nighttime monitoring), and the car.
+            <div class="messages">
+                <a class="pub" href="#sendcan">sendcan</a>
+                <a class="pub" href="#can">can</a>
+                <a class="pub" href="#peripheralState">peripheralState</a>
+                <a class="pub" href="#pandaStates">pandaStates</a>
+                <a class="pub" href="#ubloxRaw">ubloxRaw</a>
+                <a class="sub" href="#controlsState">controlsState</a>
+                <a class="sub" href="#frameData">driverCameraState</a>
+                <a class="sub" href="#deviceState">deviceState</a>
+            </div>
+        </div>
+
+        <div id="camerad" class="service">
+            <h3>camerad</h3>
+            Camerad manages both the road and driver camera (plus an additional wide-road camera on the comma three), and handles autofocus and autoexposure. Camerad writes the image data directly to visionipc which can efficiently pass images around with low overhead.
+            <div class="messages">
+                <a class="pub" href="#frameData">roadCameraState</a>
+                <a class="pub" href="#frameData">driverCameraState</a>
+                <a class="pub" href="#frameData">wideRoadCameraState</a>
+                <a class="pub" href="#thumbnail">thumbnail</a>
+                <a class="sub" href="#driverState">driverState</a>
+            </div>
+        </div>
+
+        <div id="sensord" class="service">
+            <h3>sensord</h3>
+            Sensord configures and reads the rest of the sensors (gyro, accelerometer, magnetometer and light sensors).
+            <div class="messages">
+                <a class="pub" href="#gpsLocationExternal">gpsLocationExternal</a>
+                <a class="pub" href="#qcomGnss">qcomGnss</a>
+                <a class="pub" href="#sensorEvents">sensorEvents</a>
+                <a class="sub" href="#ubloxGnss">ubloxGnss</a>
+                <a class="sub" href="#qcomGnss">qcomGnss</a>
+            </div>
+        </div>
+
+        <div id="modeld" class="service">
+            <h3>modeld</h3>
+            This service reads in the image stream from visionipc into the main driving neural network. Using this data along with the desire inputs (changing lanes etc.), the neural network tries to predict where and how to drive, under the given conditions. Modeld runst the supercombo model, which outputs the desired driving path along with other metadata including lane lines, lead cars, road edges and more.
+            <div class="messages">
+                <a class="pub" href="#modelV2">modelV2</a>
+                <a class="pub" href="#cameraOdometry">cameraOdometry</a>
+                <a class="sub" href="#lateralPlan">lateralPlan</a>
+                <a class="sub" href="#frameData">roadCameraState</a>
+                <a class="sub" href="#liveCalibration">liveCalibration</a>
+            </div>
+        </div>
+
+        <div id="dmonitoringmodeld" class="service">
+            <h3>dmonitoringmodeld</h3>
+            uitleg over dmonitoringmodeld
+            <div class="messages">
+                <a class="pub" href="#driverState">driverState</a>
+                <a class="sub" href="#liveCalibration">liveCalibration</a>
+            </div>
+        </div>
+
+        <div id="dmonitoringd" class="service">
+            <h3>dmonitoringd</h3>
+            Driver monitoring is one of the most salient features of OpenPilot. Comma makes sure that the drivers are paying adequate attention to the road and are capable of taking over in case openpilot needs them to. This service contains the logic for assessing if the driver can take over if necessary. If not, OpenPilot alerts the driver. This decision is based on outputs of the dmonitoring model, information about the scene from the driving model and a few more parameters. Drivers are blocked from engaging OpenPilot if they were distracted for extended periods of time.
+            <div class="messages">
+                <a class="pub" href="#driverState">driverState</a>
+            </div>
+        </div>
+
+        <div id="ubloxd" class="service">
+            <h3>ubloxd</h3>
+            uitleg over ubloxd
+            <div class="messages">
+            </div>
+        </div>
+
+        <div id="locationd" class="service">
+            <h3>locationd</h3>
+            This service is responsible for localizing the car in the world. Localization is an essential step in accurately describing the state of your car and its interaction with the world. This is how OpenPilot knows your speed, if you're in a banked turn or if you're going uphill. OpenPilot combines noisy data from an array of sensors in a Kalman Filter (live_kf), and publishes the filtered values. This localizer outputs the position, orientation, velocity, angular velocity and acceleration of the car.
+            <div class="messages">
+                <a class="pub" href="#liveLocationKalman">liveLocationKalman</a>
+                <a class="sub" href="#gpsLocationExternal">gpsLocationExternal</a>
+                <a class="sub" href="#carParams">carParams</a>
+            </div>
+        </div>
+
+        <div id="calibrationd" class="service">
+            <h3>calibrationd</h3>
+            The input to the neural network driving model is warped into the calibrated frame, which is aligned with the pitch and yaw of the vehicle. This normalizes the image stream to account for the various ways in which people mount their deivces on their windshields.
+
+            <div class="messages">
+                <a class="pub" href="#liveCalibration">liveCalibration</a>
+                <a class="sub" href="#cameraOdometry">cameraOdometry</a>
+                <a class="sub" href="#carState">carState</a>
+            </div>
+        </div>
+
+        <div id="paramsd" class="service">
+            <h3>paramsd</h3>
+            There are a host of parameters that are specific to car models (mass, steering ratio, tire stiffness, steering offset, wheel-to-center-of-mass-distance etc.) that are necessary to convert a driving path to the signals that the car understands, like steering angle. Comma hard-coded a lot of these values as car-model-specific parametes, and treats them as constants. But some of these parameters are either inaccurate, change during the life of a car or even during a drive depending on road conditions. So, OpenPilot needs to accurately estimate these parameters in order to have better control over the way the car responds to inputs. OpenPilot uses a Kalman Filter to achieve this, assuming a single track vehicle model.
+
+            <div class="messages">
+                <a class="pub" href="#liveParameters">liveParameters</a>
+                <a class="sub" href="#liveLocationKalman">liveLocationKalman</a>
+                <a class="sub" href="#carState">carState</a>
+            </div>
+        </div>
+
+        <div id="radard" class="service">
+            <h3>radard</h3>
+            uitleg over radard
+            <div class="messages">
+                <a class="pub" href="#radarState">radarState</a>
+                <a class="pub" href="#liveTracks">liveTracks</a>
+                <a class="sub" href="#modelV2">modelV2</a>
+                <a class="sub" href="#carState">carState</a>
+            </div>
+        </div>
+
+        <div id="plannerd" class="service">
+            <h3>plannerd</h3>
+            uitleg over plannerd
+            <div class="messages">
+                <a class="pub" href="#longitudinalPlan">longitudinalPlan</a>
+                <a class="pub" href="#lateralPlan">lateralPlan</a>
+                <a class="sub" href="#carState">carState</a>
+                <a class="sub" href="#controlsState">controlsState</a>
+                <a class="sub" href="#radarState">radarState</a>
+                <a class="sub" href="#modelV2">modelV2</a>
+            </div>
+        </div>
+
+        <div id="controlsd" class="service">
+            <h3>controlsd</h3>
+            uitleg over controlsd
+            <div class="messages">
+                <a class="pub" href="#sendcan">sendcan</a>
+                <a class="pub" href="#controlsState">controlsState</a>
+                <a class="pub" href="#carState">carState</a>
+                <a class="pub" href="#carControl">carControl</a>
+                <a class="pub" href="#carEvents">carEvents</a>
+                <a class="pub" href="#carParams">carParams</a>
+                <a class="sub" href="#deviceState">deviceState</a>
+                <a class="sub" href="#pandaStates">pandaStates</a>
+                <a class="sub" href="#peripheralState">peripheralState</a>
+                <a class="sub" href="#modelV2">modelV2</a>
+                <a class="sub" href="#liveCalibration">liveCalibration</a>
+                <a class="sub" href="#driverMonitoringState">driverMonitoringState</a>
+                <a class="sub" href="#longitudinalPlan">longitudinalPlan</a>
+                <a class="sub" href="#lateralPlan">lateralPlan</a>
+                <a class="sub" href="#liveLocationKalman">liveLocationKalman</a>
+                <a class="sub" href="#managerState">managerState</a>
+                <a class="sub" href="#liveParameters">liveParameters</a>
+                <a class="sub" href="#radarState">radarState</a>
+            </div>
+        </div>
+
+        <div id="managerd" class="service">
+            <h3>managerd</h3>
+            This manages the starting and stopping of all the processes described above and below.
+            <div class="messages">
+                <a class="pub" href="#managerState">managerState</a>
+                <a class="sub" href="#deviceState">deviceState</a>
+                <a class="sub" href="#carParams">carParams</a>
+            </div>
+        </div>
+
+        <div id="thermald" class="service">
+            <h3>thermald</h3>
+            This service monitors various things about the state of the device running OpenPilot, such as CPU and memory usage, power supply status, system temperatures (hence the name) and more. Thermald also monitors various conditions under which OpenPilot should go onroad, Comma's term for the state where all the driving proceses are running.
+
+            <div class="messages">
+                <a class="pub" href="#deviceState">deviceState</a>
+                <a class="sub" href="#peripheralState">peripheralState</a>
+                <a class="sub" href="#gpsLocationExternal">gpsLocationExternal</a>
+                <a class="sub" href="#controlsState">controlsState</a>
+                <a class="sub" href="#pandaStates">pandaStates</a>
+            </div>
+        </div>
+
+        <div id="loggerd" class="service">
+            <h3>loggerd</h3>
+            This service handles all of OpenPilot's logging. Compressed video and sensor data is logged as training data, to keep improving the neural networks. All cereal messages, system crash reports etc. are also logged so Comma can understand and fix failures.
+            <div class="messages">
+            </div>
+        </div>
+
+        <div id="athenad" class="service">
+            <h3>athenad</h3>
+            Athenad sets up a websocket connection to the Comma.ai servers, and handles all the device related requests from connect.comma.ai. The device can be reached by sending REST API calls to athena.comma.ai, see the docs for more information. Examples of possible API calls are requesting battery voltage, setting a navigation destination, car location or requests to upload files.
+            <div class="messages">
+                <a class="sub" href="#deviceState">deviceState</a>
+            </div>
+        </div>
+
+        <div id="ui" class="service">
+            <h3>ui</h3>
+            This service handles everything show to the user. While the car is off, it contains a training guide to onboard new users, shows system status and exposes some settings. While the car is on, the road-facing camera stream is shown with overlaid visualizations of the driving path, lane lines and lead cars.
+            <div class="messages">
+                <a class="pub" href="#navThumbnail">navThumbnail</a>
+                <a class="pub" href="#navInstruction">navInstruction</a>
+                <a class="pub" href="#navRoute">navRoute</a>
+                <a class="sub" href="#deviceState">deviceState</a>
+                <a class="sub" href="#controlsState">controlsState</a>
+                <a class="sub" href="#lateralPlan">lateralPlan</a>
+                <a class="sub" href="#modelV2">modelV2</a>
+                <a class="sub" href="#liveCalibration">liveCalibration</a>
+                <a class="sub" href="#radarState">radarState</a>
+                <a class="sub" href="#deviceState">deviceState</a>
+                <a class="sub" href="#frameData">roadCameraState</a>
+                <a class="sub" href="#pandaStates">pandaStates</a>
+                <a class="sub" href="#carParams">carParams</a>
+                <a class="sub" href="#driverMonitoringState">driverMonitoringState</a>
+                <a class="sub" href="#sensorEvents">sensorEvents</a>
+                <a class="sub" href="#carState">carState</a>
+                <a class="sub" href="#liveLocationKalman">liveLocationKalman</a>
+                <a class="sub" href="#frameData">wideRoadCameraState</a>
+                <a class="sub" href="#managerState">managerState</a>
+                <a class="sub" href="#navInstruction">navInstruction</a>
+                <a class="sub" href="#navRoute">navRoute</a>
+            </div>
+        </div>
+
+    </section>
+
+    <section class="messagetypes">
+        <h1>Message types</h1>
+        <div id="sendcan" class="messagetype">
+            <h4>sendcan</h4>
+            <p>
+                sends the can data
+            </p>
+        </div>
+        <div id="can" class="messagetype">
+            <h4>can</h4>
+            <p>
+                address<sup>[UInt32]</sup>, busTime<sup>[UInt16]</sup>, dat<sup>[Data]</sup>, src<sup>[UInt8]</sup>
+            </p>
+        </div>
+        <div id="peripheralState" class="messagetype">
+            <h4>peripheralState</h4>
+            <p>
+                pandaType<sup>[PandaState.PandaType]</sup>, voltage<sup>[UInt32]</sup>, current<sup>[UInt32]</sup>, fanSpeedRpm<sup>[Int16]</sup>, usbPowerMode<sup>[UsbPowerMode]</sup>
+            </p>
+        </div>
+        <div id="pandaStates" class="messagetype">
+            <h4>pandaStates</h4>
+            <p>
+                ignitionLine<sup>[Bool]</sup>, controlsAllowed<sup>[Bool]</sup> , gasInterceptorDetected<sup>[Bool]</sup>, canSendErrs<sup>[UInt32]</sup>, canFwdErrs<sup>[UInt32]</sup>, canRxErrs<sup>[UInt32]</sup>,
+                gmlanSendErrs<sup>[UInt32]</sup>, pandaType<sup>[PandaType]</sup>, ignitionCan<sup>[Bool]</sup>, safetyModel<sup>[Car.Params.SafetyModel]</sup>, safetyParam<sup>[UInt16]</sup>, alternativeExperience<sup>[UInt16]</sup>, faultStatus<sup>[FaultStatus]</sup>,
+                powerSaveEnabled<sup>[Bool]</sup>, uptime<sup>[UInt32]</sup>, faults<sup>[List(FaultType)]</sup>, harnessStatus<sup>[HarnessStatus]</sup>, heartbeatLost<sup>[Bool]</sup>, blockedCnt<sup>[UInt32]</sup>, interruptLoad<sup>[Float32]</sup>
+            </p>
+        </div>
+
+        <div id="ubloxRaw" class="messagetype">
+            <h4>ubloxRaw</h4>
+            <p>
+                data<sup>[Data]</sup>
+            </p>
+        </div>
+
+        <div id="controlsState" class="messagetype">
+            <h4>controlsState</h4>
+            <p>
+                startMonoTime<sup>[UInt64]</sup>, canMonoTimes<sup>[List(UInt64)]</sup>, longitudinalPlanMonoTime<sup>[UInt64]</sup>, lateralPlanMonoTime<sup>[UInt64]</sup>,
+                state<sup>[OpenPilotState]</sup>, enabled<sup>[Bool]</sup>, active<sup>[Bool]</sup>, longControlState<sup>[Car.CarControl.Actuators.LongControlState]</sup>, vPid<sup>[Float32]</sup>, vTargetLead<sup>[Float32]</sup>, vCruise<sup>[Float32]</sup>, upAccelCmd<sup>[Float32]</sup>,
+                uiAccelCmd<sup>[Float32]</sup>, ufAccelCmd<sup>[Float32]</sup>, aTarget<sup>[Float32]</sup>, curvature<sup>[Float32]</sup>, forceDecel<sup>[Bool]</sup>, alertText1<sup>[Text]</sup>, alertText2<sup>[Text]</sup>,
+                alertStatus<sup>[AlertStatus]</sup>, alertSize<sup>[AlertSize]</sup>, alertBlinkingRate<sup>[Float32]</sup>, alertType<sup>[Text]</sup>, alertSound<sup>[Car.CarControl.HUDControl.AudibleAlert]</sup>, engageable<sup>[Bool]</sup>,
+                cumLagMs<sup>[Float32]</sup>, canErrorCounter<sup>[UInt32]</sup>, lateralControlState<sup>[union]</sup>
+
+            </p>
+        </div>
+
+
+        <div id="frameData" class="messagetype">
+            <h4>frameData (roadCameraState, driverCameraState, wideRoadCameraState)</h4>
+            <p>
+                frameId<sup>[UInt32]</sup>, encodeId<sup>[UInt32]</sup>, frameIdSensor<sup>[UInt32]</sup>, frameType<sup>[FrameType]</sup>, frameLength<sup>[Int32]</sup>, timestampEof<sup>[UInt64]</sup>, timestampSof<sup>[UInt64]</sup>, processingTime<sup>[Float32]</sup>,
+                integLines<sup>[Int32]</sup>, highConversionGain<sup>[Bool]</sup>, gain<sup>[Float32]</sup>, measuredGreyFraction<sup>[Float32]</sup>, targetGreyFraction<sup>[Float32]</sup>, lensPos<sup>[Int32]</sup>, lensSag<sup>[Float32]</sup>,
+                lensErr<sup>[Float32]</sup>, lensTruePos<sup>[Float32]</sup>, focusVal<sup>[List(Int16)]</sup>, focusConf<sup>[List(Uint8)]</sup>, sharpnessScore<sup>[List(UInt16)]</sup>, recoverState<sup>[Int32]</sup>, transform<sup>[List(Float32)]</sup>,
+                androidCaptureResult<sup>[AndroidCaptureResult]</sup>, image<sup>[Data]</sup>,  temperaturesC<sup>[List(Float32)]</sup>
+            </p>
+        </div>
+
+
+        <div id="deviceState" class="messagetype">
+            <h4>deviceState</h4>
+            <p>
+                usbOnline<sup>[Bool]</sup>, networkType<sup>[NetworkType]</sup>, networkInfo<sup>[NetworkInfo]</sup>, networkStrength<sup>[NetworkStrength]</sup>, networkMetered<sup>[Bool]</sup>,
+                lastAthenaPingTime<sup>[UInt64]</sup>, started<sup>[Bool]</sup>, startedMonoTime<sup>[UInt64]</sup>, freeSpacePercent<sup>[Float32]</sup>,
+                memoryUsagePercent<sup>[Int8]</sup>, gpuUsagePercent<sup>[Int8]</sup>, cpuUsagePercent<sup>[List(Int8)]</sup>, batteryPercent<sup>[Int46]</sup>,
+                batteryCurrent<sup>[Int32]</sup>, chargingError<sup>[Bool]</sup>, chargingDisabled<sup>[Bool]</sup>, offroadPowerUsageUwh<sup>[UInt32]</sup>,
+                carBatteryCapacityUwh<sup>[UInt32]</sup>, powerDrawW<sup>[Float32]</sup>, cpuTempC<sup>[list(Float32)]</sup>, gpuTempC<sup>[list(Float32)]</sup>, memoryTempC<sup>[Float32]</sup>,
+                ambientTempC<sup>[Float32]</sup>, nvmeTempC<sup>[list(Float32)]</sup>, modemTempC<sup>[list(Float32)]</sup>, pmicTempC<sup>[list(Float32)]</sup>, thermalZones<sup>[list(ThermalZone)]</sup>,
+                thermalStatus<sup>[ThermalStatus]</sup>, fanSpeedPercentDesired<sup>[UInt16]</sup>, screenBrightnessPercent<sup>[Int8]</sup>
+            </p>
+        </div>
+
+
+        <div id="thumbnail" class="messagetype">
+            <h4>thumbnail</h4>
+            <p>
+                frameId<sup>[UInt32]</sup>, timestampEof<sup>[UInt64]</sup>, thumbnail<sup>[Data]</sup>
+            </p>
+        </div>
+
+
+        <div id="driverState" class="messagetype">
+            <h4>driverState</h4>
+            <p>
+                frameId<sup>[UInt32]</sup>, modelExecutionTime<sup>[Float32]</sup>, dspExecutionTime<sup>[Float32]</sup>, rawPredictions<sup>[Data]</sup> , faceOrientation<sup>[List(Float32)]</sup>, facePosition<sup>[List(Float32)]</sup>,
+                faceProb<sup>[Float32]</sup>, leftEyeProb<sup>[Float32]</sup>, rightEyeProb<sup>[Float32]</sup>, leftBlinkProb<sup>[Float32]</sup>, rightBlinkProb<sup>[Float32]</sup>, faceOrientationStd<sup>[List(Float32)]</sup>,
+                facePositionStd<sup>[List(Float32)]</sup>, sunglassesProb<sup>[Float32]</sup>, poorVision<sup>[Float32]</sup>, partialFace<sup>[Float32]</sup>, distractedPose<sup>[Float32]</sup>, distractedEyes<sup>[Float32]</sup>,
+                eyesOnRoad<sup>[Float32]</sup>, phoneUse<sup>[Float32]</sup>, occludedProb<sup>[Float32]</sup>, readyProb<sup>[List(Float32)]</sup>, notReadyProb<sup>[List(Float32)]</sup>
+            </p>
+        </div>
+
+
+        <div id="gpsLocationExternal" class="messagetype">
+            <h4>gpsLocationExternal</h4>
+            <p>
+                flags<sup>[UInt16]</sup>, latitude<sup>[Float64]</sup>, longitude<sup>[Float64]</sup>, altitude<sup>[Float64]</sup>, speed<sup>[Float32]</sup>, bearingDeg<sup>[Float32]</sup>, timestamp<sup>[Int64]</sup>, source<sup>[SensorSource]</sup>, vNED<sup>[List(Float32)]</sup>, verticalAccuracy<sup>[Float32]</sup>,
+                bearingAccuracyDeg<sup>[Float32]</sup>, speedAccuracy<sup>[Float32]</sup>
+            </p>
+        </div>
+
+
+        <div id="qcomGnss" class="messagetype">
+            <h4>qcomGnss</h4>
+            <p>
+                data<sup>[Data]</sup>
+            </p>
+        </div>
+
+        <div id="sensorEvents" class="messagetype">
+            <h4>sensorEvents</h4>
+            <p>
+                version<sup>[Int32]</sup>, sensor<sup>[Int32]</sup>, type<sup>[Int32]</sup>, timestamp<sup>[Int64]</sup>
+            </p>
+        </div>
+
+        <div id="ubloxGnss" class="messagetype">
+            <h4>ubloxGnss</h4>
+            <p>
+                measurementReport<sup>[MeasurementReport]</sup>, ephemeris<sup>[Ephemeris]</sup>, ionoData<sup>[IonoData]</sup>, hwStatus<sup>[HwStatus]</sup>, hwStatus2<sup>[HwStatus2]</sup>
+            </p>
+        </div>
+
+        <div id="modelV2" class="messagetype">
+            <h4>modelV2</h4>
+            <p>
+                frameId<sup>[UInt32]</sup>, frameIdExtra<sup>[UInt32]</sup>, frameAge<sup>[UInt32]</sup>, frameDropPerc<sup>[Float32]</sup>, timestampEof<sup>[UInt64]</sup>, modelExecutionTime<sup>[Float32]</sup>, gpuExecutionTime<sup>[Float32]</sup>,
+                rawPredictions<sup>[Data]</sup>, position<sup>[XYZTData]</sup>, orientation<sup>[XYZTData]</sup>, velocity<sup>[XYZTData]</sup>, orientationRate<sup>[XYZTData]</sup>, acceleration<sup>[XYZTData]</sup>, laneLines<sup>[List(XYZTData)]</sup>,
+                laneLineProbs<sup>[List(XYZTData)]</sup>, laneLineStds<sup>[List(XYZTData)]</sup>, roadEdges<sup>[List(XYZTData)]</sup>, roadEdgeStds<sup>[List(Float32)]</sup>, leads<sup>[List(LeadDataV2)]</sup>, leadsV3<sup>[List(LeadDataV3)]</sup>, meta<sup>[MetaData]</sup>
+            </p>
+        </div>
+
+        <div id="cameraOdometry" class="messagetype">
+            <h4>cameraOdometry</h4>
+            <p>
+                frameId<sup>[UInt32]</sup>, timestampEof<sup>[UInt64]</sup>, trans<sup>[List(Float32)]</sup>, rot<sup>[List(Float32)]</sup>, transStd<sup>[List(Float32)]</sup>, rotStd<sup>[List(Float32)]</sup>
+            </p>
+        </div>
+
+        <div id="lateralPlan" class="messagetype">
+            <h4>lateralPlan</h4>
+            <p>
+                modelMonoTime<sup>[UInt64]</sup>, laneWidth<sup>[Float32]</sup>, lProb<sup>[Float32]</sup>, rProb<sup>[Float32]</sup>, dPathPoints<sup>[List(Float32)]</sup>, dProb<sup>[Float32]</sup>, mpcSolutionValid<sup>[Bool]</sup>, desire<sup>[Desire]</sup>,
+                laneChangeState<sup>[LaneChangeState]</sup>, laneChangeDirection<sup>[laneChangeDirection]</sup>, useLaneLines<sup>[Bool]</sup>, psis<sup>[List(Float32)]</sup>, curvatures<sup>[List(Float32)]</sup>, curvatureRates<sup>[List(Float32)]</sup>,
+                solverExecutionTime<sup>[Float32]</sup>
+            </p>
+        </div>
+
+        <div id="liveCalibration" class="messagetype">
+            <h4>liveCalibration</h4>
+            <p>
+                calStatus<sup>[Int8]</sup>, calCycle<sup>[Int32]</sup>, calPerc<sup>[Int8]</sup>, validBlocks<sup>[Int32]</sup>
+            </p>
+        </div>
+
+        <div id="liveLocationKalman" class="messagetype">
+            <h4>liveLocationKalman</h4>
+            <p>
+                positionECEF<sup>[Measurement]</sup>, positionGeodetic<sup>[Measurement]</sup>, velocityECEF<sup>[Measurement]</sup>, velocityNED<sup>[Measurement]</sup>, velocityDevice<sup>[Measurement]</sup>, accelerationDevice<sup>[Measurement]</sup>,
+                orientationECEF<sup>[Measurement]</sup>, calibratedOrientationECEF<sup>[Measurement]</sup>, orientationNED<sup>[Measurement]</sup>, angularVelocityDevice<sup>[Measurement]</sup>,
+                calibratedOrientationNED<sup>[Measurement]</sup>, velocityCalibrated<sup>[Measurement]</sup>, accelerationCalibrated<sup>[Measurement]</sup>, angularVelocityCalibrated<sup>[Measurement]</sup>,
+                gpsWeek<sup>[Int32]</sup>, gpsTimeOfWeek<sup>[Float64]</sup>, status<sup>[Status]</sup>, unixTimestampMillis<sup>[Int64]</sup>, inputsOK<sup>[Bool]</sup>, posenetOK<sup>[Bool]</sup>, gpsOK<sup>[Bool]</sup>, sensorsOK<sup>[Bool]</sup>,
+                deviceStable<sup>[Bool]</sup>, timeSinceReset<sup>[Float64]</sup>, excessiveResets<sup>[Bool]</sup>
+
+            </p>
+        </div>
+
+        <div id="carParams" class="messagetype">
+            <h4>carParams</h4>
+            <p>
+                carName<sup>[Text]</sup>, carFingerprint<sup>[Text]</sup>, fuzzyFingerprint<sup>[Bool]</sup>, notCar<sup>[Bool]</sup>, enableGasInterceptor<sup>[Bool]</sup>, pcmCruise<sup>[Bool]</sup>, enableDsu<sup>[Bool]</sup>,
+                enableApgs<sup>[Bool]</sup>, enableBsm<sup>[Bool]</sup>, flags<sup>[UInt32]</sup>,  minEnableSpeed<sup>[Float32]</sup>, minSteerSpeed<sup>[Float32]</sup>, maxSteeringAngleDeg<sup>[Float32]</sup>, safetyConfigs<sup>[List(SafetyConfig)]</sup>,
+                alternativeExperience<sup>[Int16]</sup>, mass<sup>[Float32]</sup>, wheelbase<sup>[Float32]</sup>, centerToFront<sup>[Float32]</sup>, steerRatio<sup>[Float32]</sup>, steerRatioRear<sup>[Float32]</sup>, rotationalInertia<sup>[Float32]</sup>,
+                tireStiffnessFront<sup>[Float32]</sup>, tireStiffnessRear<sup>[Float32]</sup>, longitudinalTuning<sup>[LongitudinalPIDTunig]</sup>, lateralParams<sup>[LateralParams]</sup>, lateralTuning<sup>[union]</sup>,
+                steerLimitAlert<sup>[Bool]</sup>, steerLimitTimer<sup>[Float32]</sup>, vEgoStopping<sup>[Float32]</sup>, vEgoStarting<sup>[Float32]</sup>, directAccelControl<sup>[Bool]</sup>, stoppingControl<sup>[Bool]</sup>,
+                stopAccel<sup>[Float32]</sup>, steerRateCost<sup>[Float32]</sup>, steerControlType<sup>[SteerControlType]</sup>, radarOffCan<sup>[Bool]</sup>, stoppingDecelRate<sup>[Float32]</sup>, steerActuatorDelay<sup>[Float32]</sup>,
+                longitudinalActuatorDelayLowerBound<sup>[Float32]</sup>, longitudinalActuatorDelayUpperBound<sup>[Float32]</sup>, openpilotLongitudinalControl<sup>[Bool]</sup>,
+                carVin<sup>[Text]</sup>, dashcamOnly<sup>[Bool]</sup>, transmissionType<sup>[TransmissionType]</sup>, carFw<sup>[List(CarFw)]</sup>, radarTimeStep<sup>[Float32]</sup>, fingerprintSource<sup>[Fingerprintsource]</sup>, networkLocation<sup>[NetworkLocation]</sup>,
+                wheelSpeedFactor<sup>[Float32]</sup>
+            </p>
+        </div>
+
+        <div id="carState" class="messagetype">
+            <h4>carState</h4>
+            <p>
+                events<sup>[List(CarEvent)]</sup>, canValid<sup>[Bool]</sup>, canTimeout<sup>[Bool]</sup>, vEgo<sup>[Float32]</sup>, aEgo<sup>[Float32]</sup>, vEgoRwa<sup>[Float32]</sup>, yawRate<sup>[Float32]</sup>, standstill<sup>[Bool]</sup>, wheelSpeeds<sup>[WheelSpeeds]</sup>, gas<sup>[Float32]</sup>, gasPressed<sup>[Bool]</sup>,
+                brake<sup>[Float32]</sup>, brakePressed<sup>[Bool]</sup>, parkingBrake<sup>[Bool]</sup>, brakeHoldActive<sup>[Bool]</sup>, steeringAngleDeg<sup>[Float32]</sup>, steeringAngleOffsetDeg<sup>[Float32]</sup>,
+                steeringRateDeg<sup>[Float32]</sup>, steeringTorque<sup>[Float32]</sup>, steeringTorqueEps<sup>[Float32]</sup>, steeringPressed<sup>[Bool]</sup>, steeringRateLimited<sup>[Bool]</sup>,
+                steerFaultTemporary<sup>[Bool]</sup>, steerFaultPermanent<sup>[Bool]</sup>, stockAeb<sup>[Bool]</sup>, stockFcw<sup>[Bool]</sup>, espDisabled<sup>[Bool]</sup>, accFaulted<sup>[Bool]</sup>, cruiseState<sup>[CruiseState]</sup>,
+                gearShifter<sup>[GearShifter]</sup>, buttonEvent<sup>[List(ButtonEvent)]</sup>, leftBlinker<sup>[Bool]</sup>, rightBlinker<sup>[Bool]</sup>, genericToggle<sup>[Bool]</sup>, doorOpen<sup>[Bool]</sup>, seatbeltUnlatched<sup>[Bool]</sup>,
+                clutchPressed<sup>[Bool]</sup>, canMonotimes<sup>[List(UInt64)]</sup>, leftBlindspot<sup>[Bool]</sup>, rightBlindspot<sup>[Bool]</sup>, fuelGauge<sup>[Float32]</sup>, charging<sup>[Bool]</sup>
+            </p>
+        </div>
+
+        <div id="liveParameters" class="messagetype">
+            <h4>liveParameters</h4>
+            <p>
+                valid<sup>[Bool]</sup>, gyroBias<sup>[Float32]</sup>, angleOffsetDeg<sup>[Float32]</sup>, angleOffsetAverageDeg<sup>[Float32]</sup>, stiffnessFactor<sup>[Float32]</sup>, steerRatio<sup>[Float32]</sup>, sensorValid<sup>[Bool]</sup>,
+                yawRate<sup>[Float32]</sup>, posenetSpeed<sup>[Float32]</sup>, posenetValid<sup>[Bool]</sup>, angleOffsetFastStd<sup>[Float32]</sup>, angleOffsetAverageStd<sup>[Float32]</sup>, stiffnessFactorStd<sup>[Float32]</sup>,
+                steerRatioStd<sup>[Float32]</sup>, roll<sup>[Float32]</sup>
+            </p>
+        </div>
+
+        <div id="radarState" class="messagetype">
+            <h4>radarState</h4>
+            <p>
+                canMonoTimes<sup>[List(UInt64)]</sup>, mdMonoTime<sup>[UInt64]</sup>, carStateMonoTime<sup>[UInt64]</sup>, radarErrors<sup>[List(Car.RadarData.Error)]</sup>, leadOne<sup>[LeadData]</sup>, leadTwo<sup>[LeadData]</sup>, cumLagMs<sup>[Float32]</sup>
+            </p>
+        </div>
+
+        <div id="liveTracks" class="messagetype">
+            <h4>liveTracks</h4>
+            <p>
+                trackId<sup>[Int32]</sup>, drel<sup>[Float32]</sup>, yRel<sup>[Float32]</sup>, vRel<sup>[Float32]</sup>, aRel<sup>[Float32]</sup>, timeStamp<sup>[Float32]</sup>, status<sup>[Float32]</sup>, currnetTime<sup>[Float32]</sup>, stationary<sup>[Bool]</sup>, oncoming<sup>[Bool]</sup>
+            </p>
+        </div>
+
+        <div id="longitudinalPlan" class="messagetype">
+            <h4>longitudinalPlan</h4>
+            <p>
+                modelMonoTime<sup>[UInt64]</sup>, hasLead<sup>[Bool]</sup>, fcw<sup>[Bool]</sup>, longitudinalPlanSource<sup>[LongitudinalPlanSource]</sup>, accels<sup>[List(Float32)]</sup>, speeds<sup>[List(Float32)]</sup>, jerks<sup>[List(Float32)]</sup>, solverExecutionTime<sup>[Float32]</sup>
+            </p>
+        </div>
+
+        <div id="carControl" class="messagetype">
+            <h4>carControl</h4>
+            <p>
+                enabled<sup>[Bool]</sup>, latActive<sup>[Bool]</sup>, longActive<sup>[Bool]</sup>, actuators<sup>[Actuators]</sup>, actuatorsOutput<sup>[Actuators]</sup>, orientationNED<sup>[List(Float32)]</sup>, angularVelocity<sup>[List(Float32)]</sup>,
+                cruiseControl<sup>[CruiseControl]</sup>, hudControl<sup>[HUDControl]</sup>
+            </p>
+        </div>
+
+        <div id="carEvents" class="messagetype">
+            <h4>carEvents</h4>
+            <p>
+                name<sup>[EventName]</sup>, enable<sup>[Bool]</sup>, noEntry<sup>[Bool]</sup>, warning<sup>[Bool]</sup>, userDisable<sup>[Bool]</sup>, softDisable<sup>[Bool]</sup>, immediateDisable<sup>[Bool]</sup>, preEnable<sup>[Bool]</sup>, permanent<sup>[Bool]</sup>,
+                override<sup>[Bool]</sup>
+
+            </p>
+        </div>
+
+        <div id="driverMonitoringState" class="messagetype">
+            <h4>driverMonitoringState</h4>
+            <p>
+                events<sup>[List(Car.CarEvents)]</sup>, faceDetected<sup>[Bool]</sup>, isDistracted<sup>[Bool]</sup>, distractedType<sup>[UInt32]</sup>, awarenessStatus<sup>[Float32]</sup>, posePitchOffset<sup>[Float32]</sup>,
+                posePitchValidCount<sup>[UInt32]</sup>, poseYawOffset<sup>[Float32]</sup>, poseYawValidCount<sup>[UInt32]</sup>, stepChange<sup>[Float32]</sup>, awarenessActive<sup>[Float32]</sup>, awarenessPassive<sup>[Float32]</sup>,
+                isLowStd<sup>[Bool]</sup>, hiStdCount<sup>[UInt32]</sup>, isActiveMode<sup>[Bool]</sup>
+            </p>
+        </div>
+
+        <div id="managerState" class="messagetype">
+            <h4>managerState</h4>
+            <p>
+                processes<sup>[List(ProcessState)]</sup>
+            </p>
+        </div>
+
+        <div id="navThumbnail" class="messagetype">
+            <h4>navThumbnail</h4>
+            <p>
+                frameId<sup>[UInt64]</sup>, timestampEof<sup>[UInt64]</sup>, thumbnail<sup>[Data]</sup>
+            </p>
+        </div>
+
+        <div id="navInstruction" class="messagetype">
+            <h4>navInstruction</h4>
+            <p>
+                maneuverPrimaryText<sup>[Text]</sup>, maneuverSecondaryText<sup>[Text]</sup>, maneuverDistance<sup>[Float32]</sup>, maneuverType<sup>[Text]</sup>, maneuverModifier<sup>[Text]</sup>,
+                distanceRemaining<sup>[Float32]</sup>, timeRemaining<sup>[Float32]</sup>, timeRemainingTypical<sup>[Float32]</sup>, lanes<sup>[List(Lane)]</sup>, showFull<sup>[Bool]</sup>
+            </p>
+        </div>
+
+        <div id="navRoute" class="messagetype">
+            <h4>navRoute</h4>
+            <p>
+                coordinates<sup>[List(Coordinates]</sup>
+            </p>
+        </div>
+
+        <div id="gpsNMEA" class="messagetype">
+            <h4>gpsNMEA</h4>
+            <p>
+                timestamp<sup>[Int64]</sup>, localWalltime<sup>[UInt64]</sup>, nmea<sup>[Text]</sup>
+            </p>
+        </div>
+
+        <div id="encodeIndex" class="messagetype">
+            <h4>encodeIndex (qRoadEncodeIdx, wideRoadEncodeIdx, driverEncodeIdx, roadEncodeIdx)</h4>
+            <p>
+                frameId<sup>[UInt32]</sup>, type<sup>[Type]</sup>, encodeId<sup>[UInt32]</sup>, segmentNum<sup>[UInt32]</sup>, segmentId<sup>[UInt32]</sup>, segmentIdEncode<sup>[UInt32]</sup>, timestampSof<sup>[UInt64]</sup>, timestampEof<sup>[UInt64]</sup>, flags<sup>[UInt32]</sup>, len<sup>[UInt32]</sup>
+            </p>
+        </div>
+
+        <div id="logMessage_errorLogMessage" class="messagetype">
+            <h4>logMessage & errorLogMessage</h4>
+            <p>
+                text<sup>[Text]</sup>
+            </p>
+        </div>
+
+        <div id="androidLog" class="messagetype">
+            <h4>androidLog</h4>
+            <p>
+                id<sup>[Uint8]</sup>, <sup>[UInt64]</sup>, priority<sup>[UInt8]</sup>, pod<sup>[Int32]</sup>, tid<sup>[Int32]</sup>, tag<sup>[Text]</sup>, message<sup>[Text]</sup>
+            </p>
+        </div>
+
+        <div id="procLog" class="messagetype">
+            <h4>procLog</h4>
+            <p>
+                cpuTimes<sup>[List(CPUTimes)]</sup>, mem<sup>[Mem]</sup>, procs<sup>[List(Process)]</sup>
+            </p>
+        </div>
+
+
+        <div id="gnssMeasurement" class="messagetype">
+            <h4>gnssMeasurement</h4>
+            <p>
+                position<sup>[List(Float64)]</sup>, ubloxMonoTime<sup>[UInt64]</sup>, correctedMeasurement<sup>[List(CorrectedMeasurement)]</sup>
+            </p>
+        </div>
+
+
+        <div id="clocks" class="messagetype">
+            <h4>clocks</h4>
+            <p>
+                bootTimeNanos<sup>[UInt64]</sup>, monotonicNanos<sup>[UInt64]</sup>, monotonicRawNanos<sup>[UInt64]</sup>, wallTimeNanos<sup>[UInt64]</sup>, modemUptimeMillis<sup>[UInt64]</sup>
+            </p>
+        </div>
+
+
+        <div id="uploaderState" class="messagetype">
+            <h4>uploaderState</h4>
+            <p>
+                immediateQueueSize<sup>[UInt32]</sup>, immediateQueueCount<sup>[UInt32]</sup>, rawQueueSize<sup>[UInt32]</sup>, rawQueueCount<sup>[UInt32]</sup>, lastTime<sup>[Float32]</sup>, lastSpeed<sup>[Float32]</sup>, lastFilename<sup>[Text]</sup>
+            </p>
+        </div>
+
+
+
+    </section>
+</section>
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+
+
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.5/dist/umd/popper.min.js" integrity="sha384-Xe+8cL9oJa6tN/veChSP7q+mnSPaj5Bcu9mPX5F5xIGE0DVittaqT5lorf0EI7Vk" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-kjU+l4N0Yf4ZOJErLsIcvOU2qSb74wXpOhqTvwVx3OElZRweTnQ6d31fXEoRD1Jy" crossorigin="anonymous"></script>
+
+</html>
+
+
+
+
